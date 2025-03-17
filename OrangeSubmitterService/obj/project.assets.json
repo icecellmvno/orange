@@ -685,16 +685,6 @@
         "build": {
           "buildTransitive/net6.0/_._": {}
         }
-      },
-      "orangesdk/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v9.0",
-        "compile": {
-          "bin/placeholder/orangesdk.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/orangesdk.dll": {}
-        }
       }
     }
   },
@@ -1691,19 +1681,13 @@
         "system.threading.ratelimiting.nuspec",
         "useSharedDesignerContext.txt"
       ]
-    },
-    "orangesdk/1.0.0": {
-      "type": "project",
-      "path": "../orangesdk/orangesdk.csproj",
-      "msbuildProject": "../orangesdk/orangesdk.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
       "Microsoft.Extensions.Hosting >= 9.0.2",
       "RabbitMQ.Client >= 7.1.1",
-      "StackExchange.Redis >= 2.8.31",
-      "orangesdk >= 1.0.0"
+      "StackExchange.Redis >= 2.8.31"
     ]
   },
   "packageFolders": {
@@ -1730,11 +1714,7 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {
-            "D:\\orange\\orangesdk\\orangesdk.csproj": {
-              "projectPath": "D:\\orange\\orangesdk\\orangesdk.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {

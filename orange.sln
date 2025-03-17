@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "orangesdk", "orangesdk\orangesdk.csproj", "{9EDD35B3-6744-44B1-9915-8459A5ADD863}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testOrange", "testOrange\testOrange.csproj", "{FA371728-5414-41D6-831A-201AB51DDBC6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrangeSubmitterService", "OrangeSubmitterService\OrangeSubmitterService.csproj", "{73109FC5-9EC6-4FEE-87E7-419716B9EB35}"
@@ -12,10 +10,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9EDD35B3-6744-44B1-9915-8459A5ADD863}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9EDD35B3-6744-44B1-9915-8459A5ADD863}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9EDD35B3-6744-44B1-9915-8459A5ADD863}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9EDD35B3-6744-44B1-9915-8459A5ADD863}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA371728-5414-41D6-831A-201AB51DDBC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA371728-5414-41D6-831A-201AB51DDBC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA371728-5414-41D6-831A-201AB51DDBC6}.Release|Any CPU.ActiveCfg = Release|Any CPU

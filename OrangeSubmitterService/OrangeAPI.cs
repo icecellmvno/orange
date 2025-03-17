@@ -1,4 +1,7 @@
-﻿namespace orangesdk;
+﻿using OrangeSubmitterService;
+using RabbitMQ.Client;
+using StackExchange.Redis;
+namespace OrangeSubmitterService;
 
 using System;
 using System.Net.Http;
@@ -12,14 +15,17 @@ public class OrangeAPI
     private string ClientSecret { get; }
     private string SenderAddress { get; }
     private string Url { get; } = "https://api.orange.com";
-
+    private ConnectionFactory _factory;
     private string ClientBase64 => Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}"));
-
+    private ConnectionMultiplexer _redis;
+    private readonly IDatabase _db;
     public OrangeAPI(string clientId, string clientSecret, string senderAddress)
     {
         ClientId = clientId;
         ClientSecret = clientSecret;
         SenderAddress = senderAddress;
+        _redis = ConnectionMultiplexer.Connect("localhost");
+        _db = _redis.GetDatabase(1);
     }
 
     public async Task<string> GetTokenAsync()
@@ -31,7 +37,8 @@ public class OrangeAPI
             {
                 { "Authorization", $"Basic {ClientBase64}" }
             },
-            Content = new StringContent("grant_type=client_credentials", Encoding.UTF8, "application/x-www-form-urlencoded")
+            Content = new StringContent("grant_type=client_credentials", Encoding.UTF8,
+                "application/x-www-form-urlencoded")
         };
 
         var response = await client.SendAsync(request);
@@ -48,7 +55,7 @@ public class OrangeAPI
         }
     }
 
-    public async Task<OrangeResponse> SendSmsAsync(string senderName, string receiverAddress, string message)
+    public async Task SendSmsAsync(MessageComposer composer)
     {
         var token = await GetTokenAsync();
 
@@ -59,13 +66,13 @@ public class OrangeAPI
         {
             outboundSMSMessageRequest = new
             {
-                address = $"tel:+{receiverAddress}",
+                address = $"tel:+{composer.number}",
                 senderAddress = $"tel:+{SenderAddress}",
                 outboundSMSTextMessage = new
                 {
-                    message = message
+                    message = composer.message
                 },
-                senderName = senderName
+                senderName = composer.source
             }
         };
 
@@ -81,23 +88,51 @@ public class OrangeAPI
 
         var response = await client.SendAsync(request);
         var content = await response.Content.ReadAsStringAsync();
-        var _orangeResponse = JsonSerializer.Deserialize<OrangeResponse>(content);
+        
+
         if (response.IsSuccessStatusCode)
         {
             var json = JsonSerializer.Deserialize<JsonElement>(content);
             var resourceUrl = json.GetProperty("outboundSMSMessageRequest").GetProperty("resourceURL").GetString();
-            Console.WriteLine("Message sent successfully.");
 
+           
+            var DLRData = JsonSerializer.Deserialize<OrangeResponse>(content);
+            
+            string messageId = DLRData.outboundSMSMessageRequest.resourceURL.Split("/").Last();
+            string key = $"Orange:{messageId}";
+            var combined_data = new
+                { message_data = composer, response_data = JsonSerializer.Serialize(response) };
+            var value = JsonSerializer.Serialize(combined_data);
+            if (_db.StringSetAsync(key, value.ToString()).Result)
+            {
+                Console.WriteLine(value);
+            }
+          
             await SubscribeToDeliveryReceiptsAsync(token, resourceUrl);
-            _orangeResponse.status = true;
-            return _orangeResponse;
         }
         else
         {
-            _orangeResponse.status = false;
-            return _orangeResponse;
-
+            var dlr = new SmppDLRModel
+            {
+                DoneDate = DateTime.UtcNow.ToLongDateString(),
+                State = "Failed",
+                MessageId = composer.messageId,
+                ErrorCode = 201.ToString(),
+                SubmitDate = DateTime.UtcNow.ToLongDateString(),
+                Text = composer.message,
+                system_id = composer.system_id,
+            };
+            PublishRabbitMQMessage(JsonSerializer.Serialize(dlr));
         }
+    }
+
+    private async void PublishRabbitMQMessage(string message)
+    {
+        var connection = await _factory.CreateConnectionAsync();
+        var channel = await connection.CreateChannelAsync();
+        await channel.QueueDeclareAsync("http_to_smpp_dlr", true, false, false, null);
+        var body = Encoding.UTF8.GetBytes(message);
+        await channel.BasicPublishAsync("", "http_to_smpp_dlr", body);
     }
 
     private async Task SubscribeToDeliveryReceiptsAsync(string token, string resourceUrl)
@@ -140,5 +175,3 @@ public class OrangeAPI
         }
     }
 }
-
-

@@ -1,6 +1,5 @@
 using System.Text;
 using System.Text.Json;
-using orangesdk;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using StackExchange.Redis; // Make sure you have the correct namespace for OrangeAPI
@@ -61,34 +60,7 @@ namespace OrangeSubmitterService
                     if (messageComposer.Concatenation == null)
                     {
                         _logger.LogInformation("tek mesaj geldi");
-                        var response = _orangeAPI.SendSmsAsync(messageComposer.source, messageComposer.number,
-                            messageComposer.message).Result;
-                        _logger.LogInformation($"Response: {JsonSerializer.Serialize(response)}");
-                        if (response.status)
-                        {
-                            string messageId = response.outboundSMSMessageRequest.resourceURL.Split("/").Last();
-                            string key = $"Orange:{messageId}";
-                            var combined_data = new
-                                { message_data = messageComposer, response_data = JsonSerializer.Serialize(response) };
-                            var value = JsonSerializer.Serialize(combined_data);
-                            _logger.LogInformation(value);
-                            await _db.StringSetAsync(key, value.ToString());
-                        }
-                        else
-                        {
-                            var dlr = new SmppDLRModel
-                            {
-                                DoneDate = DateTime.UtcNow.ToLongDateString(),
-                                State = "Failed",
-                                MessageId = messageComposer.messageId,
-                                ErrorCode = 201.ToString(),
-                                SubmitDate = DateTime.UtcNow.ToLongDateString(),
-                                Text = messageComposer.message,
-                                system_id = messageComposer.system_id,
-                            };
-                            PublishRabbitMQMessage(JsonSerializer.Serialize(dlr));
-                            _logger.LogInformation("DLR Received");
-                        }
+                        await _orangeAPI.SendSmsAsync(messageComposer);
                     }
                     else
                     {
@@ -108,35 +80,9 @@ namespace OrangeSubmitterService
                         if (longmessage && _longmessageComposers[Id].Concatenation.SequenceNumber == total)
                         {
                             _logger.LogInformation($"Total: {_longmessageComposers[Id].message}");
-                            var response =  _orangeAPI.SendSmsAsync(_longmessageComposers[Id].source,_longmessageComposers[Id].number,
-                                _longmessageComposers[Id].message).Result;
-                            if (response.status)
-                            {
-                                string messageId = response.outboundSMSMessageRequest.resourceURL.Split("/").Last();
-                                string key = $"Orange:{messageId}";
-                                var combined_data = new
-                                    { message_data = messageComposer, response_data = JsonSerializer.Serialize(response) };
-                                var value = JsonSerializer.Serialize(combined_data);
-                                
-                                _logger.LogInformation(value);
-                                await _db.StringSetAsync(key, value.ToString());
-                            }
-                            else
-                            {
-                                var dlr = new SmppDLRModel
-                                {
-                                    DoneDate = DateTime.UtcNow.ToLongDateString(),
-                                    State = "Failed",
-                                    MessageId = messageComposer.messageId,
-                                    ErrorCode = 201.ToString(),
-                                    SubmitDate = DateTime.UtcNow.ToLongDateString(),
-                                    Text = messageComposer.message,
-                                    system_id = messageComposer.system_id,
-                                };
-                                PublishRabbitMQMessage(JsonSerializer.Serialize(dlr));
-                                _logger.LogInformation("DLR Received");
-                            }
-                            _logger.LogInformation($"Response: {response.status}");
+                            await _orangeAPI.SendSmsAsync(_longmessageComposers[Id]);
+
+
                             _longmessageComposers.Remove(Id);
                         }
                     }
@@ -144,14 +90,7 @@ namespace OrangeSubmitterService
                 await channel.BasicConsumeAsync("smpp_to_http", true, consumer);
             }
         }
-        private async void PublishRabbitMQMessage(string message)
-        {
-            var connection = await _factory.CreateConnectionAsync();
-            var channel = await connection.CreateChannelAsync();
-            await channel.QueueDeclareAsync("http_to_smpp_dlr", true, false, false, null);
-            var body = Encoding.UTF8.GetBytes(message);
-            await channel.BasicPublishAsync("", "http_to_smpp_dlr", body);
-        }
+
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {

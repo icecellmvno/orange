@@ -39,8 +39,6 @@ D:\orange\OrangeSubmitterService\bin\Debug\net9.0\System.Diagnostics.EventLog.dl
 D:\orange\OrangeSubmitterService\bin\Debug\net9.0\System.Threading.RateLimiting.dll
 D:\orange\OrangeSubmitterService\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.Messages.dll
 D:\orange\OrangeSubmitterService\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
-D:\orange\OrangeSubmitterService\bin\Debug\net9.0\orangesdk.dll
-D:\orange\OrangeSubmitterService\bin\Debug\net9.0\orangesdk.pdb
 D:\orange\OrangeSubmitterService\obj\Debug\net9.0\OrangeSubmitterService.csproj.AssemblyReference.cache
 D:\orange\OrangeSubmitterService\obj\Debug\net9.0\OrangeSubmitterService.GeneratedMSBuildEditorConfig.editorconfig
 D:\orange\OrangeSubmitterService\obj\Debug\net9.0\OrangeSubmitterService.AssemblyInfoInputs.cache
@@ -52,3 +50,4 @@ D:\orange\OrangeSubmitterService\obj\Debug\net9.0\refint\OrangeSubmitterService.
 D:\orange\OrangeSubmitterService\obj\Debug\net9.0\OrangeSubmitterService.pdb
 D:\orange\OrangeSubmitterService\obj\Debug\net9.0\OrangeSubmitterService.genruntimeconfig.cache
 D:\orange\OrangeSubmitterService\obj\Debug\net9.0\ref\OrangeSubmitterService.dll
+D:\orange\OrangeSubmitterService\obj\Debug\net9.0\OrangeSubmitterService.sourcelink.json

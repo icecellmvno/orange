@@ -12,8 +12,4 @@
         <PackageReference Include="RabbitMQ.Client" Version="7.1.1" />
         <PackageReference Include="StackExchange.Redis" Version="2.8.31" />
     </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\orangesdk\orangesdk.csproj" />
-    </ItemGroup>
 </Project>

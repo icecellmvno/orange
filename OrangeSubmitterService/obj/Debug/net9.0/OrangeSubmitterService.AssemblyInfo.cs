@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OrangeSubmitterService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+330eb58ab56ec8f35b727240cf8e11611185866e")]
 [assembly: System.Reflection.AssemblyProductAttribute("OrangeSubmitterService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OrangeSubmitterService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

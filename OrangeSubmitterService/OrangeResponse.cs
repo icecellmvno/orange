@@ -1,9 +1,9 @@
-namespace orangesdk;
+namespace OrangeSubmitterService;
 
 public class OrangeResponse
 {
     public OutboundSMSMessageRequest outboundSMSMessageRequest { get; set; }
-    public bool status { get; set; }
+    public string status { get; set; }
 }
 
 public class OutboundSMSMessageRequest

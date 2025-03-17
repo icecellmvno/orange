@@ -1,4 +1,4 @@
-namespace orangesdk;
+namespace OrangeSubmitterService;
 
 public class SmppDLRModel
 {
