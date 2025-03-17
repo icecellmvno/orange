@@ -71,7 +71,7 @@ namespace OrangeSubmitterService
                             var combined_data = new
                                 { message_data = messageComposer, response_data = JsonSerializer.Serialize(response) };
                             var value = JsonSerializer.Serialize(combined_data);
-                            await _db.ListRightPushAsync(key, value.ToString());
+                            await _db.StringSetAsync(key, value.ToString());
                         }
                         else
                         {
@@ -116,7 +116,7 @@ namespace OrangeSubmitterService
                                 var combined_data = new
                                     { message_data = messageComposer, response_data = JsonSerializer.Serialize(response) };
                                 var value = JsonSerializer.Serialize(combined_data);
-                                await _db.ListRightPushAsync(key, value.ToString());
+                                await _db.StringSetAsync(key, value.ToString());
                             }
                             else
                             {
