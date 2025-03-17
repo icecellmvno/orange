@@ -61,9 +61,9 @@ namespace OrangeSubmitterService
                     if (messageComposer.Concatenation == null)
                     {
                         _logger.LogInformation("tek mesaj geldi");
-                        var response = await _orangeAPI.SendSmsAsync(messageComposer.source, messageComposer.number,
-                            messageComposer.message);
-                        _logger.LogInformation($"Response: {response}");
+                        var response = _orangeAPI.SendSmsAsync(messageComposer.source, messageComposer.number,
+                            messageComposer.message).Result;
+                        _logger.LogInformation($"Response: {JsonSerializer.Serialize(response)}");
                         if (response.status)
                         {
                             string messageId = response.outboundSMSMessageRequest.resourceURL.Split("/").Last();
@@ -108,8 +108,8 @@ namespace OrangeSubmitterService
                         if (longmessage && _longmessageComposers[Id].Concatenation.SequenceNumber == total)
                         {
                             _logger.LogInformation($"Total: {_longmessageComposers[Id].message}");
-                            var response = await _orangeAPI.SendSmsAsync(_longmessageComposers[Id].source,_longmessageComposers[Id].number,
-                                _longmessageComposers[Id].message);
+                            var response =  _orangeAPI.SendSmsAsync(_longmessageComposers[Id].source,_longmessageComposers[Id].number,
+                                _longmessageComposers[Id].message).Result;
                             if (response.status)
                             {
                                 string messageId = response.outboundSMSMessageRequest.resourceURL.Split("/").Last();
