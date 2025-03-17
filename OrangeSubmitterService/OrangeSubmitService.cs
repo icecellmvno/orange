@@ -1,11 +1,5 @@
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
-using System;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 using orangesdk;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -73,7 +67,7 @@ namespace OrangeSubmitterService
                         if (response.status)
                         {
                             string messageId = response.outboundSMSMessageRequest.resourceURL.Split("/").Last();
-                            string key = $"Orange-:{messageId}";
+                            string key = $"Orange:{messageId}";
                             var combined_data = new
                                 { message_data = messageComposer, response_data = JsonSerializer.Serialize(response) };
                             var value = JsonSerializer.Serialize(combined_data);
@@ -118,7 +112,7 @@ namespace OrangeSubmitterService
                             if (response.status)
                             {
                                 string messageId = response.outboundSMSMessageRequest.resourceURL.Split("/").Last();
-                                string key = $"Orange-:{messageId}";
+                                string key = $"Orange:{messageId}";
                                 var combined_data = new
                                     { message_data = messageComposer, response_data = JsonSerializer.Serialize(response) };
                                 var value = JsonSerializer.Serialize(combined_data);
