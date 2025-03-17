@@ -31,7 +31,7 @@ namespace OrangeSubmitterService
             _orangeAPI = new OrangeAPI(_apiSettings.ClientId, _apiSettings.ClientSecret, _apiSettings.OrangeAccount);
             _factory = new ConnectionFactory();
             _redis = ConnectionMultiplexer.Connect("localhost");
-            _db = _redis.GetDatabase();
+            _db = _redis.GetDatabase(1);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
