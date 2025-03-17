@@ -1,0 +1,11 @@
+D:\orange\orangesdk\bin\Debug\net9.0\orangesdk.deps.json
+D:\orange\orangesdk\bin\Debug\net9.0\orangesdk.dll
+D:\orange\orangesdk\bin\Debug\net9.0\orangesdk.pdb
+D:\orange\orangesdk\obj\Debug\net9.0\orangesdk.GeneratedMSBuildEditorConfig.editorconfig
+D:\orange\orangesdk\obj\Debug\net9.0\orangesdk.AssemblyInfoInputs.cache
+D:\orange\orangesdk\obj\Debug\net9.0\orangesdk.AssemblyInfo.cs
+D:\orange\orangesdk\obj\Debug\net9.0\orangesdk.csproj.CoreCompileInputs.cache
+D:\orange\orangesdk\obj\Debug\net9.0\orangesdk.dll
+D:\orange\orangesdk\obj\Debug\net9.0\refint\orangesdk.dll
+D:\orange\orangesdk\obj\Debug\net9.0\orangesdk.pdb
+D:\orange\orangesdk\obj\Debug\net9.0\ref\orangesdk.dll
